@@ -1,0 +1,1 @@
+void intersection(int* A, int* B, int lenA, int lenB, int** C, int* lenC);

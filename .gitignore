@@ -1,4 +1,8 @@
 *.o
 *.exe
-tempCodeRunnerFile.cpp
+temp*
 .vscode
+.idea
+CMakeLists.txt
+test*
+cmake-build-debug
