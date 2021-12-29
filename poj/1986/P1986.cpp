@@ -1,57 +1,92 @@
-#include <bits/stdc++.h>
+/**
+ * @file test.cpp
+ * @author io-wiki
+ * @brief 
+ * @version 0.1
+ * @date 2021-12-29
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <vector>
+
+#define MXN 50007
 using namespace std;
-#define MAX_SIZE 50001
-struct Edge {
-    int v, w, next;
-};
-Edge e[MAX_SIZE];
-int cnt;
-int head[MAX_SIZE];
-int N, M, K;
-char visited[MAX_SIZE];
-int dep[MAX_SIZE];
-int fa[MAX_SIZE][32];
-int distance[MAX_SIZE][32];
+std::vector<int> v[MXN];
+std::vector<int> w[MXN];
 
-void add_edge(int u, int v, int distance) {
-    e[cnt].v = v;e[cnt].w = distance;
-    e[cnt].next = head[u];
-    head[u] = cnt++;
+int fa[MXN][31], cost[MXN][31], dep[MXN];
+int n, m, k;
+int a, b, c;
+
+// dfs，用来为 lca 算法做准备。接受两个参数：dfs 起始节点和它的父亲节点。
+void dfs(int root, int fno) {
+  // 初始化：第 2^0 = 1 个祖先就是它的父亲节点，dep 也比父亲节点多 1。
+  fa[root][0] = fno;
+  dep[root] = dep[fa[root][0]] + 1;
+  // 初始化：其他的祖先节点：第 2^i 的祖先节点是第 2^(i-1) 的祖先节点的第
+  // 2^(i-1) 的祖先节点。
+  for (int i = 1; i < 31; ++i) {
+    fa[root][i] = fa[fa[root][i - 1]][i - 1];
+    cost[root][i] = cost[fa[root][i - 1]][i - 1] + cost[root][i - 1];
+  }
+  // 遍历子节点来进行 dfs。
+  int sz = v[root].size();
+  for (int i = 0; i < sz; ++i) {
+    if (v[root][i] == fno) continue;
+    cost[v[root][i]][0] = w[root][i];
+    dfs(v[root][i], root);
+  }
 }
 
-void dfs(int root, int parent) {
-    dep[root] = dep[parent] + 1;
-
-    fa[root][0] = parent;
-    distance[root][0] = 
-
-    for(int i = 1; i < 32; i++) {
-        fa[root][i] = fa[fa[root][i-1]][i-1];
-        distance
+// lca。用倍增算法算取 x 和 y 的 lca 节点。
+int lca(int x, int y) {
+  // 令 y 比 x 深。
+  if (dep[x] > dep[y]) swap(x, y);
+  // 令 y 和 x 在一个深度。
+  int tmp = dep[y] - dep[x], ans = 0;
+  for (int j = 0; tmp; ++j, tmp >>= 1)
+    if (tmp & 1) ans += cost[y][j], y = fa[y][j];
+  // 如果这个时候 y = x，那么 x，y 就都是它们自己的祖先。
+  if (y == x) return ans;
+  // 不然的话，找到第一个不是它们祖先的两个点。
+  for (int j = 30; j >= 0 && y != x; --j) {
+    if (fa[x][j] != fa[y][j]) {
+      ans += cost[x][j] + cost[y][j];
+      x = fa[x][j];
+      y = fa[y][j];
     }
-
-
+  }
+  // 返回结果。
+  ans += cost[x][0] + cost[y][0];
+  return ans;
 }
-
-long long int LCA(int u, int v) {
-
-}
-
-// 四个方向似乎对这题并没有什么影响...
+char d;
 int main() {
-    scanf("%d %d", &N, &M);
-    int a, b, c;
-    char d;
-    for(int i = 0; i < M; i++) {
-        scanf("%d %d %d %c", &a, &b, &c, &d);
-        add_edge(a, b, c);
-        add_edge(b, a, c);
-    }
-    dfs(1, 0);
-    scanf("%d", &K);
-    for(int i = 0; i < K; i++) {
-        scanf("%d %d", &a, &b);
-        printf("%lld", LCA(a, b));
-    }
-    return 0;
+  // 初始化表示祖先的数组 fa，代价 cost 和深度 dep。
+  memset(fa, 0, sizeof(fa));
+  memset(cost, 0, sizeof(cost));
+  memset(dep, 0, sizeof(dep));
+  // 读入树：节点数一共有 n 个。
+  scanf("%d %d", &n, &m);
+  for (int i = 1; i <= m; ++i) {
+    scanf("%d %d %d %c", &a, &b, &c, &d);
+    v[a].push_back(b);
+    v[b].push_back(a);
+    w[a].push_back(c);
+    w[b].push_back(c);
+  }
+  // 为了计算 lca 而使用 dfs。
+  dfs(1, 0);
+  // 查询 m 次，每一次查找两个节点的 lca 点。
+  scanf("%d", &k);
+  for (int i = 0; i < k; ++i) {
+    scanf("%d %d", &a, &b);
+    printf("%d\n", lca(a, b));
+  }
+  return 0;
 }
