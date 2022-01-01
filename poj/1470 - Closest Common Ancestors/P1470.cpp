@@ -1,4 +1,16 @@
 #include <bits/stdc++.h>
+/**
+ * 读入N，为节点个数
+ * 读入N-1条边，每次读入一个出节点时都说明该节点不会是根节点
+ * 创建一个count数组，如果最近父节点是idx，那么count[idx]++即可
+ * 每次读入
+ * 最后读count数组数据，如果不为0就输出count[idx]的值
+ * 
+ * LCA算法：
+ * 1.首先使用dfs求出每个节点的深度和其上2^i(i=0,1,2,...)层的祖先
+ * 2.求两节点LCA时，首先保持两节点的深度统一，如果两节点上的$2^i$层的祖先不相同，那两节点就向上走$2^i$层
+ * 循环结束后任一节点的父节点就是两节点的LCA
+ */
 using namespace std;
 #define MAX_SIZE 901
 long long int N=0;
@@ -51,6 +63,7 @@ int LCA(int u, int v) {
 }
 // 实在不知道哪里错了...
 int main() {
+    // 注意题目中已经说了会有非常多组数据输入，必须在最外层套个while...不然直接WA
     while(scanf("%lld", &N) != EOF) {
     int a, b, c;
     memset(head, -1, sizeof(head));

@@ -13,6 +13,12 @@ struct Edge {
     int u, v, w, next;
 }; 
 
+/*
+ * 1.读取同学要求：如果同学x希望同学y得到的糖果不比他多于w，就加入一条有向边(x, y)，权值为w。
+ * 2.使用spfa算法，将节点1加入栈中，并遍历起点为1的边，松弛每一个节点，如果需要进行松弛操作，且该边的终点并不在栈中，就把该节点加入栈中。
+ * 3.d[N]就是最大值
+ */
+
 Edge e[MAX_EDGE_NUM];
 int d[MAX_SIZE+1];
 
@@ -26,9 +32,7 @@ void spfa() {
     /* spfa的基本步骤：
      * 1. 使用先进先出的队列保持松弛节点每次取出队首节点
      * 2. 如果更新了距离，那么还需要把v放入优先队列中
-
-     * 不知道为什么用queue就会有问题
-     * 但是用了stack就不会超时...
+     * 不知道为什么用queue就会有问题，但是用了stack就不会超时...
      */
      stack<int> q;
      q.emplace(1);
@@ -40,13 +44,11 @@ void spfa() {
      d[1] = 0;
      in[1] = true;
      int count[MAX_SIZE] = {0};
-     while(!q.empty()) {
-         int h = q.top();
-        //  printf("h: %d\n", h);
-         q.pop();in[h] = false;
+    while(!q.empty()) {
+        int h = q.top();
+        // printf("h: %d\n", h);
+        q.pop();in[h] = false;
          for(int i = head[h]; ~i; i = e[i].next) {
-            //  printf("i: %d\n", i);
-            //  printf("v: %d, u: %d, w: %d\n", e[i].v, e[i].u, e[i].w);
              if(d[e[i].v] > d[e[i].u] + e[i].w) {
                  d[e[i].v] = d[e[i].u] + e[i].w;
                  if(!in[e[i].v]) {

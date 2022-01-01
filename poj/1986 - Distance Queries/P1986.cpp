@@ -1,12 +1,8 @@
 /**
- * @file test.cpp
- * @author io-wiki
- * @brief 
- * @version 0.1
- * @date 2021-12-29
- * 
- * @copyright Copyright (c) 2021
- * 
+ * 同样还是lca的模板题目，只是增加了距离求和
+ * 在常规lca中，fa[i][j]表示第i个节点上面2^j的最先节点，那么可以设置一个二维数组cost[i][j]
+ * 表示节点i向上j的距离大小同样也可以用cost[i][j] = cost[fa[i][j-1]][j-1]来更新
+ * 在lca(int u, int v)函数中，向上找最近祖先时，同时也分别加上两点向上跳跃时经过的距离即可获得最终答案
  */
 
 #include <cstdio>

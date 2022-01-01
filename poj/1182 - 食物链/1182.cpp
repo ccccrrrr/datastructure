@@ -1,6 +1,4 @@
 #include <cstdio>
-
-
 using namespace std;
 #define MAX_ANIMAL 50000
 

@@ -3,10 +3,12 @@
 using namespace std; 
 
 int L, T, O;
-char c[2];
 int tag[(10000<<2)+5];
 int content[(10000<<2)+5];
-
+/*
+ * 每一个节点储存该节点代表的区间中所有存在的颜色。所有颜色可以用一个int值表示，如果第一个颜色存在，int中的第1位就为1，反之为0。
+ * 求一个区间的所有颜色个数就是求每个子区间的并，求int值有几个1就是最后的结果。
+ */
 // build:初始化，题目中给出的要求是每一块在最开始都是颜色1，所以只需要初始化成1就可以
 void build(int left, int right, int t) {
     for(int i = 1; i <= right; i++) {
@@ -73,24 +75,23 @@ void update(int left, int right, int t, int l, int r, int color) {
 }
 
 int main() {
-    scanf("%d %d %d\n", &L, &T, &O);
+    scanf("%d%d%d", &L, &T, &O);
     int a, b, d;
+    char c;
     build(1, L, 1);
     while(O--) {
-        scanf("%s", c);
-        // printf("c: %c\n", c);
-        switch (c[0]) {
+        getchar();
+        c = getchar();
+        switch (c) {
         case 'P':
-            scanf("%d %d\n", &a, &b);
-            // printf("!!!\n");
+            scanf("%d %d", &a, &b);
             printf("%d\n", colors(calc(1, L, 1, a, b)));
             break;
         case 'C':
-            scanf("%d %d %d\n", &a, &b, &d);
+            scanf("%d %d %d", &a, &b, &d);
             update(1, L, 1, a, b, d);
             break;
         }
     }
-
     return 0;
 }
