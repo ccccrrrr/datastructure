@@ -38,3 +38,50 @@
 //         return quicksort(nums, 0, nums.size()-1, nums.size()+1-k);
 //     }
 // };
+
+
+// 12ms - 40.21%
+// 9.7MB - 68.98%
+// class Solution {
+// public:
+//     // 从下到上调整堆
+//     void build(vector<int>& nums, int k) {
+//         for(int i = (k-1)/2; i >= 0; --i) {
+//             int parent = i;
+//             int child = (parent<<1)+1;
+//             for(;; parent=child) {
+//                 child = (parent<<1) + 1;
+//                 if(child >=k) break;
+//                 if(child+1< k && nums[child+1]<nums[child]) child++;
+//                 if(nums[child] < nums[parent]) swap(nums[parent], nums[child]);
+//             }
+//         }
+//         for(int i = 0; i < k; i++)
+//             printf("%d ", nums[i]);
+//         printf("\n");
+//     }
+
+//     void insert(vector<int>& nums, int k) {
+//         int ss = nums.size();
+//         for(int i = k; i < ss; i++) {
+//             if(nums[i] < nums[0]) continue;
+//             nums[0] = nums[i];
+//             int ele = nums[0];
+//             int child, parent;
+//             for(parent = 0; parent * 2 + 1 <= k-1; parent = child) {
+//                 child = (parent<<1)+1;
+//                 if(child+1 <= k-1 && nums[child+1]<nums[child]) child++;
+//                 if(ele <= nums[child]) break;
+//                 nums[parent] = nums[child];
+//             }
+//             nums[parent] = ele;
+//         }
+//     }
+
+//     // 快速排序方法
+//     int findKthLargest(vector<int>& nums, int k) {
+//         build(nums, k);
+//         insert(nums, k);
+//         return nums.at(0);
+//     }
+// };
