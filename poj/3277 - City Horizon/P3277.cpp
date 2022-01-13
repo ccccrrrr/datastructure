@@ -62,7 +62,6 @@ void Insert(int left, int right, int height, int tree_left, int tree_right, int 
     // tree_left, tree_right t 表示当前位于线段树节点t，且其范围为[tree_left, tree_right)
     if(left == tree_left && right == tree_right) {
         tree[t] = height; // 由于插入线段是根据高度由大到小排序过的，所以越后面的树肯定是越高的
-        // 我在这里并不知道tag是做什么用的...
         return;
     }
 
