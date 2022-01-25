@@ -64,7 +64,6 @@ int main() {
                 }
                 if(rootx != rooty) {
                     animal[rootx]->parent = rooty;
-                    // rootx -> rooty = rootx->b->c->rooty
                     animal[rootx]->relation = (1+animal[c]->relation - animal[b]->relation + 3) % 3;
                 }
         }
